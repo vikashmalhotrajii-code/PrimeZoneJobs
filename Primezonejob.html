@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PrimeZone Free Jobs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      margin: 0;
+      padding: 12px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 20px;
+      color: #1e3c72;
+      margin-bottom: 5px;
+    }
+
+    .sub {
+      text-align: center;
+      font-size: 12px;
+      color: gray;
+      margin-bottom: 12px;
+    }
+
+    .job-box {
+      background: #f1f5ff;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1e3c72;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .admin-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .card {
+      background:#f1f5ff;
+      padding:12px;
+      border-radius:10px;
+      margin-bottom:12px;
+      font-size:13px;
+      line-height:1.6;
+      border-left:4px solid #1e3c72;
+    }
+
+    .success-screen {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container" id="mainBox">
+  <h1>PrimeZone Free Jobs</h1>
+  <div class="sub">Trusted Work From Home Opportunity</div>
+
+  <div class="job-box">
+    💼 Salary: ₹13,000 - ₹18,000<br>
+    🏠 Work: Work From Home<br>
+    🎯 Age: 18+<br>
+    📞 Role: Hindi Telecaller<br>
+    🔒 No Registration Fees
+  </div>
+
+  <form id="jobForm">
+    <label>Full Name</label>
+    <input type="text" id="name" required>
+
+    <label>Age</label>
+    <input type="number" id="age" required>
+
+    <label>Gender</label>
+    <select id="gender" required>
+      <option value="">Select</option>
+      <option>Male</option>
+      <option>Female</option>
+    </select>
+
+    <label>Mobile Number</label>
+    <input type="tel" id="mobile" required>
+
+    <label>12th Pass</label>
+    <select id="pass" required>
+      <option value="">Select</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <label>Your City</label>
+    <input type="text" id="city" required>
+
+    <button type="submit">Apply Now</button>
+  </form>
+
+  <button class="admin-btn" onclick="openAdmin()">i</button>
+</div>
+
+<div class="container admin-panel" id="adminPanel">
+  <h1>All Applications</h1>
+  <div id="dataList"></div>
+</div>
+
+<script>
+
+// FORM SUBMIT
+document.getElementById("jobForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  let data = {
+    name: document.getElementById("name").value.trim(),
+    age: document.getElementById("age").value.trim(),
+    gender: document.getElementById("gender").value,
+    mobile: document.getElementById("mobile").value.trim(),
+    pass: document.getElementById("pass").value,
+    city: document.getElementById("city").value.trim()
+  };
+
+  // VALIDATION (name empty na ho)
+  if(data.name === "") {
+    alert("Please enter your name");
+    return;
+  }
+
+  let allData = JSON.parse(localStorage.getItem("jobs")) || [];
+  allData.push(data);
+  localStorage.setItem("jobs", JSON.stringify(allData));
+
+  // FORM RESET (important)
+  document.getElementById("jobForm").reset();
+
+  // SUCCESS SCREEN
+  document.body.innerHTML = `
+    <div class="success-screen">
+      <div>
+        <h2 style="color:green;">✅ Your Form Applied Successfully</h2>
+        <p>Our team will contact you soon</p>
+      </div>
+    </div>
+  `;
+});
+
+
+// ADMIN PANEL
+function openAdmin() {
+  let code = prompt("Enter Admin Code:");
+
+  if(code === "KINGMONEYBOY") {
+
+    document.getElementById("mainBox").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+
+    let data = JSON.parse(localStorage.getItem("jobs")) || [];
+    let list = document.getElementById("dataList");
+
+    list.innerHTML = "";
+
+    if(data.length === 0) {
+      list.innerHTML = "No Data Found";
+      return;
+    }
+
+    data.slice().reverse().forEach(user => {
+
+      list.innerHTML += `
+        <div class="card">
+          <b>👤 Name:</b> ${user.name} <br>
+          <b>🎂 Age:</b> ${user.age} <br>
+          <b>⚧ Gender:</b> ${user.gender} <br>
+          <b>📞 Mobile:</b> ${user.mobile} <br>
+          <b>🎓 12th Pass:</b> ${user.pass} <br>
+          <b>📍 City:</b> ${user.city}
+        </div>
+      `;
+    });
+
+  } else {
+    alert("Access Denied");
+  }
+}
+
+</script>
+
+</body>
+</html>
